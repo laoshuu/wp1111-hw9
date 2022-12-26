@@ -3,8 +3,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import db from './db';
 import routes from './routes/index';
+import dotenv from "dotenv-defaults";
+
+dotenv.config();
 
 const app = express();
+const path = require('path');
 
 // Parses the text as JSON and exposes the resulting 
 // object on req.body.
@@ -19,7 +23,7 @@ app.get("/api", (req, res) => {
     console.log("GET /api");
     res.send({ message: "Hello from the server!" }).status(200);
 });
-
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === "production") {
     const __dirname = path.resolve();
     app.use(express.static(path.join(__dirname, "../frontend", "build")));
@@ -29,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(express.json())
 
-app.use('/api', routes);
+app.use('/', routes);
 db.connect();
 
 // define server
